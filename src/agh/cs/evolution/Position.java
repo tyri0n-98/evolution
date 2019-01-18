@@ -1,17 +1,28 @@
 package agh.cs.evolution;
 
 public class Position {
-    private int x;
-    private int y;
+    public final int x;
+    public final int y;
 
     public Position(int x, int y){
         this.x = x;
         this.y = y;
     }
 
-    public boolean equals(Position pos){
-        return this.x == pos.x && this.y == pos.y;
+    public String toString(){
+        return "(" + this.x + ", " + this.y + ")";
     }
+
+    public boolean equals(Object other){
+        if (this == other)
+            return true;
+        if (!(other instanceof Position))
+            return false;
+        Position that = (Position) other;
+        return this.x == that.x && this.y == that.y;
+    }
+
+    @Override
     public int hashCode(){
         int hash = 17;
         hash += this.x * 23;

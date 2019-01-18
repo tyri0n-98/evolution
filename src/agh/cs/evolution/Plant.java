@@ -10,4 +10,8 @@ public class Plant implements IMapElement {
     public Position getPosition(){
         return this.position;
     }
+
+    public String toString(){
+        return "* ";
+    }
 }
