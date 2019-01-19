@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 public class Animal implements IMapElement{
-    private static final int DAILY_ENERGY_LOSS = 10;
+    private static final int DAILY_ENERGY_LOSS = 20;
     private static final int ENERGY_TO_REPRODUCE = 50;
     private static final int ENERGY_GAIN = 20;
-    //private static Random randomGenerator = new Random();
     private Position position;
-    int[] genes = new int[8];
+    private int[] genes = new int[8];
     private int energy;
     private int maxEnergy = 100;
     private Direction orientation;
@@ -94,14 +93,16 @@ public class Animal implements IMapElement{
     public Animal reproduce(){
         if(!this.canReproduce()) return null;
         Random randomGenerator = new Random();
-        for(int i = -1; i<=1; i++){
-            for(int j= -1; j<=1; j++){
-                if((i != 0 || j!=0) && map.canSpawn(this.position.add(new Position(i,j)))){
-                    int direction = randomGenerator.nextInt(8);
-                    this.energy /= 2;
-                    return new Animal(this.position.add(new Position(i,j)), this.orientation.multipleNext(direction), this.mutate(), this.map);
-                }
-            }
+        Direction spawnDirection = this.orientation;
+        for(int i = 0; i<8; i++){
+            Position spawnVector = spawnDirection.getVector();
+            Position spawnPosition = this.position.add(spawnVector);
+            if(map.canSpawn(spawnPosition)){
+                int newOrientation = randomGenerator.nextInt(8);
+                this.energy /=2;
+                return new Animal(spawnPosition, this.orientation.multipleNext(newOrientation), this.mutate(), this.map);
+            }else
+                spawnDirection = spawnDirection.next();
         }
         return null;
     }

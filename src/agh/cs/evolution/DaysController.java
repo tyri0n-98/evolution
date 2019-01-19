@@ -39,10 +39,11 @@ public class DaysController {
         }
 
         System.out.print(map);
-/*        for(Animal animal: animalsList){
-            for(int i = 0; i<8; i++) System.out.print(animal.genes[i] + " ");
-            System.out.println(animal.getPosition());
-            System.out.println();
+/*            for(Animal animal: animalsList){
+                for(int i = 0; i<8; i++) System.out.print(animal.genes[i] + " ");
+                System.out.print(animal.orientation);
+                System.out.println(animal.getPosition());
+                System.out.println();
         }*/
     }
 }

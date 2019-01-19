@@ -6,7 +6,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args){
         WorldMap map = new WorldMap(100,30,10,10);
-        Animal animal = new Animal(new Position(50,15), Direction.EAST, map);
+        int[] genes = {1,1,1,1,1,1,1,1};
+        Animal animal = new Animal(new Position(50,15), Direction.SOUTH, map);
 /*        map.place(animal);
         int[] genes = {1,1,2,2,1,1,3,4};
         Animal animal1 = animal.reproduce();
@@ -21,6 +22,6 @@ public class Main {
         List<Animal> animalList = new LinkedList<>();
         animalList.add(animal);
         DaysController daysController = new DaysController(map, animalList);
-        for(int i = 0; i < 10000; i++) daysController.runDays(1);
+        for(int i = 0; i < 1000; i++) daysController.runDays(1);
     }
 }
