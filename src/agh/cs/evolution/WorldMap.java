@@ -3,14 +3,19 @@ package agh.cs.evolution;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Random;
 
 public class WorldMap {
     private Position lowerLeft;
     private Position upperRight;
     private Position jungleLowerLeft;
     private Position jungleUpperRight;
-    HashMap<Position, IMapElement> elements = new HashMap<>();
+    private HashMap<Position, IMapElement> elements = new HashMap<>();
     private MapVisualizer mapVisualizer;
+
+    public HashMap<Position, IMapElement> getElements(){
+        return this.elements;
+    }
 
     public WorldMap(int width, int height, int jungleWidth, int jungleHeight){
         if(width < jungleWidth || height < jungleHeight) throw new IllegalArgumentException("Jungle size cannot be larger than size of the map");
@@ -46,6 +51,28 @@ public class WorldMap {
         if(!isOccupied(element.getPosition())) return false;
         elements.remove(element.getPosition());
         return true;
+    }
+
+    public void spawnPlants(){
+        Random randomGenerator = new Random();
+        boolean planted = false;
+        while(!planted) {
+            int plantX = randomGenerator.nextInt(jungleUpperRight.x - jungleLowerLeft.x + 1) + jungleLowerLeft.x;
+            int plantY = randomGenerator.nextInt(jungleLowerLeft.y - jungleUpperRight.y + 1) + jungleLowerLeft.y;
+            planted = place(new Plant(new Position(plantX, plantY)));
+        }
+        planted = false;
+        while(!planted){
+            int plantX = randomGenerator.nextInt(upperRight.x + 1);
+            int plantY;
+            if(plantX < jungleLowerLeft.x || plantX > jungleUpperRight.x) plantY = randomGenerator.nextInt(upperRight.y + 1);
+            else{
+                int section = randomGenerator.nextInt(2);
+                if(section == 0) plantY = randomGenerator.nextInt(jungleLowerLeft.y);
+                else plantY = randomGenerator.nextInt(upperRight.y - jungleUpperRight.y) + jungleUpperRight.y + 1;
+            }
+            planted = place(new Plant(new Position(plantX, plantY)));
+        }
     }
 
     public void positionChanged(Position beforeMove, Position afterMove){

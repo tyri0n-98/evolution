@@ -8,7 +8,5 @@ public class Main {
         map.place(plant);
         map.place(animal);
         System.out.println(map);
-
-
     }
 }
