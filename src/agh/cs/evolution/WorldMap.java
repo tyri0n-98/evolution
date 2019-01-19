@@ -29,12 +29,15 @@ public class WorldMap {
     }
 
     public boolean isOccupied(Position position){
-        this.elements.forEach((k,v) -> System.out.println(k));
         return objectAt(position) != null;
     }
 
     public boolean canMoveTo(Position position){
-        return (!isOccupied(position) || objectAt(position) instanceof Plant) && position.smaller(this.upperRight) && position.larger(this.lowerLeft);
+        return ((!isOccupied(position) || objectAt(position) instanceof Plant) && position.smaller(this.upperRight) && position.larger(this.lowerLeft));
+    }
+
+    public boolean canSpawn(Position position){
+        return (!isOccupied(position) && position.smaller(this.upperRight) && position.larger(this.lowerLeft));
     }
 
     public IMapElement objectAt(Position position){
@@ -46,20 +49,31 @@ public class WorldMap {
         elements.put(element.getPosition(), element);
         return true;
     }
-    //TODO Possibly unnecessary method
+
     public boolean remove(IMapElement element){
         if(!isOccupied(element.getPosition())) return false;
         elements.remove(element.getPosition());
         return true;
     }
 
+    private boolean canSpawnPlantInJungle(){
+        for(int x = jungleLowerLeft.x; x <= jungleUpperRight.x; x++){
+            for(int y = jungleLowerLeft.y; y <= jungleUpperRight.y; y++){
+                if(!isOccupied(new Position(x,y))) return true;
+            }
+        }
+        return false;
+    }
+
     public void spawnPlants(){
         Random randomGenerator = new Random();
         boolean planted = false;
-        while(!planted) {
-            int plantX = randomGenerator.nextInt(jungleUpperRight.x - jungleLowerLeft.x + 1) + jungleLowerLeft.x;
-            int plantY = randomGenerator.nextInt(jungleLowerLeft.y - jungleUpperRight.y + 1) + jungleLowerLeft.y;
-            planted = place(new Plant(new Position(plantX, plantY)));
+        if(canSpawnPlantInJungle()) {
+            while (!planted) {
+                int plantX = randomGenerator.nextInt(jungleUpperRight.x - jungleLowerLeft.x + 1) + jungleLowerLeft.x;
+                int plantY = randomGenerator.nextInt(jungleUpperRight.y - jungleLowerLeft.y + 1) + jungleLowerLeft.y;
+                planted = place(new Plant(new Position(plantX, plantY)));
+            }
         }
         planted = false;
         while(!planted){
@@ -76,12 +90,13 @@ public class WorldMap {
     }
 
     public void positionChanged(Position beforeMove, Position afterMove){
-        Animal animal = (Animal)elements.remove(beforeMove);
+        Animal animal = (Animal)elements.get(beforeMove);
+        this.elements.remove(beforeMove);
         if(objectAt(afterMove) instanceof Plant){
             elements.remove(afterMove);
             animal.eat();
         }
-        elements.put(animal.getPosition(), animal);
+        this.elements.put(afterMove, animal);
     }
 
     public String toString(){return this.mapVisualizer.draw(this.lowerLeft, this.upperRight);}

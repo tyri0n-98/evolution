@@ -27,14 +27,14 @@ public enum Direction {
 
     public Position getVector(){
         switch(this){
-            case NORTH: return new Position(0,1);
-            case NORTHEAST: return new Position(1,1);
+            case NORTH: return new Position(0,-1);
+            case NORTHEAST: return new Position(1,-1);
             case EAST: return new Position(1,0);
-            case SOUTHEAST: new Position(1,-1);
-            case SOUTH: return new Position(0,-1);
-            case SOUTHWEST: return new Position(-1,-1);
+            case SOUTHEAST: new Position(1,1);
+            case SOUTH: return new Position(0,1);
+            case SOUTHWEST: return new Position(-1,1);
             case WEST: return new Position(-1,0);
-            case NORTHWEST: return new Position(-1,1);
+            case NORTHWEST: return new Position(-1,-1);
         }
         return new Position(0,0);
     }

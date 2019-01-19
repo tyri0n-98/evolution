@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 public class Animal implements IMapElement{
+    private static final int DAILY_ENERGY_LOSS = 10;
+    private static final int ENERGY_TO_REPRODUCE = 50;
+    private static final int ENERGY_GAIN = 20;
+    //private static Random randomGenerator = new Random();
     private Position position;
-    private int[] genes = new int[8];
+    int[] genes = new int[8];
     private int energy;
     private int maxEnergy = 100;
     private Direction orientation;
@@ -34,15 +38,16 @@ public class Animal implements IMapElement{
     }
 
     public boolean canReproduce(){
-        return this.energy >= 50 && this.age >= 5;
+        return this.energy >= ENERGY_TO_REPRODUCE /*&& this.age >= 5*/;
     }
 
     public int[] mutate(){
         Random randomGenerator = new Random();
+        int[] mutatedGenes = new int[8];
+        for(int i = 0; i < 8; i++) mutatedGenes[i] = this.genes[i];
         int geneToMutate = randomGenerator.nextInt(8);
         int mutationValue = randomGenerator.nextInt(3) - 1;
-        if(this.genes[geneToMutate] == 1 && mutationValue == -1) return this.genes;
-        int[] mutatedGenes = this.genes;
+        if(mutatedGenes[geneToMutate] == 1 && mutationValue == -1) return mutatedGenes;
         mutatedGenes[geneToMutate] += mutationValue;
         return mutatedGenes;
     }
@@ -56,20 +61,25 @@ public class Animal implements IMapElement{
                 sum += 1;
             }
         }
+
         Random randomGenerator = new Random();
-        int chosenDirection = genesList.get(randomGenerator.nextInt(sum));
+        int chosenDirection = genesList.get(Math.abs(randomGenerator.nextInt())%sum);
         this.orientation = this.orientation.multipleNext(chosenDirection);
     }
 
     public void eat(){
-        int energyValue = 25;
-        if(this.energy + energyValue > maxEnergy) this.energy = maxEnergy;
-        else this.energy += energyValue;
+        if(this.energy + ENERGY_GAIN > this.maxEnergy) this.energy = this.maxEnergy;
+        else this.energy += ENERGY_GAIN;
     }
 
     public void dayPassed(){
         this.age += 1;
-        this.energy -= 10;
+        this.energy -= DAILY_ENERGY_LOSS;
+        if(this.isDead()) map.remove(this);
+    }
+
+    public boolean isDead(){
+        return this.energy <= 0;
     }
 
     public void moveForward(){
@@ -81,12 +91,19 @@ public class Animal implements IMapElement{
         }
     }
 
-    //TODO Correct method reproduce
     public Animal reproduce(){
-        if(this.canReproduce())
-            return new Animal(this.position.subtract(new Position(0, 1)), this.orientation, this.mutate(), this.map);
-        else
-            return null;
+        if(!this.canReproduce()) return null;
+        Random randomGenerator = new Random();
+        for(int i = -1; i<=1; i++){
+            for(int j= -1; j<=1; j++){
+                if((i != 0 || j!=0) && map.canSpawn(this.position.add(new Position(i,j)))){
+                    int direction = randomGenerator.nextInt(8);
+                    this.energy /= 2;
+                    return new Animal(this.position.add(new Position(i,j)), this.orientation.multipleNext(direction), this.mutate(), this.map);
+                }
+            }
+        }
+        return null;
     }
 
     public Position getPosition(){
