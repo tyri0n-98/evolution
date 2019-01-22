@@ -1,7 +1,7 @@
 package agh.cs.evolution;
 
 public class MapVisualizer {
-    private final String FRAME_ELEMENT = "#";
+    private final String FRAME_ELEMENT = "# ";
     private WorldMap map;
 
     public MapVisualizer(WorldMap map){

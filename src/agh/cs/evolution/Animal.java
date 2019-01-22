@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Animal implements IMapElement{
-    private static final int DAILY_ENERGY_LOSS = 20;
-    private static final int ENERGY_TO_REPRODUCE = 50;
-    private static final int ENERGY_GAIN = 20;
+    private static final int DAILY_ENERGY_LOSS = 5;
+    private static final int ENERGY_TO_REPRODUCE = 95;
+    private static final int ENERGY_GAIN = 90;
+    private static final int AGE_TO_REPRODUCE = 2;
     private Position position;
     private int[] genes = new int[8];
     private int energy;
@@ -37,7 +38,14 @@ public class Animal implements IMapElement{
     }
 
     public boolean canReproduce(){
-        return this.energy >= ENERGY_TO_REPRODUCE /*&& this.age >= 5*/;
+        return this.energy >= ENERGY_TO_REPRODUCE && this.age >= AGE_TO_REPRODUCE;
+    }
+
+    public Direction searchForPlants(){
+        if(this.map.objectAt(this.position.add(this.orientation.getVector())) instanceof Plant) return this.orientation;
+        if(this.map.objectAt(this.position.add(this.orientation.next().getVector())) instanceof Plant) return this.orientation.next();
+        if(this.map.objectAt(this.position.add(this.orientation.multipleNext(7).getVector())) instanceof Plant) return this.orientation.multipleNext(7);
+        return null;
     }
 
     public int[] mutate(){
@@ -52,6 +60,7 @@ public class Animal implements IMapElement{
     }
 
     public void chooseDirection(){
+        //if(searchForPlants() != null) this.orientation = searchForPlants();
         List<Integer> genesList = new ArrayList<>();
         int sum = 0;
         for(int i = 0; i < this.genes.length; i++){
@@ -60,7 +69,6 @@ public class Animal implements IMapElement{
                 sum += 1;
             }
         }
-
         Random randomGenerator = new Random();
         int chosenDirection = genesList.get(Math.abs(randomGenerator.nextInt())%sum);
         this.orientation = this.orientation.multipleNext(chosenDirection);
@@ -112,6 +120,6 @@ public class Animal implements IMapElement{
     }
 
     public String toString(){
-        return "A";
+        return "A ";
     }
 }

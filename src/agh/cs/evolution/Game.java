@@ -3,15 +3,29 @@ package agh.cs.evolution;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DaysController {
+public class Game {
+    private static final int DEFAULT_MAP_WIDTH = 50;
+    private static final int DEFAULT_MAP_HEIGHT = 30;
+    private static final int DEFAULT_JUNGLE_WIDTH = 10;
+    private static final int DEFAULT_JUNGLE_HEIGHT = 10;
     private WorldMap map;
     private List<Animal> animalsList;
 
-    public DaysController(WorldMap map, List<Animal> animalsList){
-        this.animalsList = animalsList;
-        this.map = map;
+    public Game(){
+        this.map = new WorldMap(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_JUNGLE_WIDTH, DEFAULT_JUNGLE_HEIGHT);
+        Animal animal = new Animal(new Position(DEFAULT_MAP_WIDTH/2, DEFAULT_MAP_HEIGHT/2), Direction.NORTH, map);
+        this.map.place(animal);
+        this.animalsList = new LinkedList<>();
+        this.animalsList.add(animal);
     }
 
+    public Game(int mapWidth, int mapHeight, int jungleWidth, int jungleHeight){
+        this.map = new WorldMap(mapWidth, mapHeight, jungleWidth, jungleHeight);
+        Animal animal = new Animal(new Position(mapWidth/2, mapHeight/2), Direction.NORTH, map);
+        this.map.place(animal);
+        this.animalsList = new LinkedList<>();
+        this.animalsList.add(animal);
+    }
 
     public void runDay(){
         List<Animal> newAnimals = new LinkedList<>();
@@ -30,6 +44,7 @@ public class DaysController {
         }
         this.animalsList.removeAll(deadAnimals);
         this.animalsList.addAll(newAnimals);
+        if(this.animalsList.isEmpty()) return;
         map.spawnPlants();
     }
 
@@ -37,8 +52,8 @@ public class DaysController {
         for(int i = 0; i < numberOfDays; i++){
             runDay();
         }
-
-        System.out.print(map);
+        if(numberOfDays != 0)
+            System.out.print(map);
 /*            for(Animal animal: animalsList){
                 for(int i = 0; i<8; i++) System.out.print(animal.genes[i] + " ");
                 System.out.print(animal.orientation);
