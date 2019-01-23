@@ -1,2 +1,2 @@
 # evolution
-Generator ewolucyjnt
+Generator ewolucyjny
