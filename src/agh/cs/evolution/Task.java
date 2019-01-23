@@ -51,6 +51,7 @@ public class Task {
             case "setAnimalAgeToReproduce": return Command.SET_ANIMAL_AGE_TO_REPRODUCE;
             case "resetAnimalSettings": return Command.RESET_ANIMAL_SETTINGS;
             case "resetMapSettings": return Command.RESET_MAP_SETTINGS;
+            case "displaySettings": return Command.DISPLAY_SETTINGS;
             default: return Command.ERROR;
         }
     }

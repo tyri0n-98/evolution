@@ -92,9 +92,33 @@ public class Solver {
                 this.game = new Game(this.mapSettings, this.animalSettings);
                 return;
             }
+            case DISPLAY_SETTINGS:{
+                System.out.println(this.mapSettings);
+                System.out.print(this.animalSettings);
+                return;
+            }
+            case HELP:{
+                System.out.println("run                                                                               - runs one day (you can also press Enter)\n" +
+                                              "run [arg]                                                                         - runs multiple days and prints the map when finished\n" +
+                                              "run [arg1] [arg2]                                                                 - runs number of days specified in arg1 and prints the map after amount of days specified in arg2\n" +
+                                              "reset                                                                             - resets the game but preserves settings\n" +
+                                              "displaySettings                                                                   - displays current map and animals settings\n" +
+                                              "setMapSize [mapWidth] [mapHeight] [jungleWidth] [jungleHeight]                    - sets size of the map and resets the game (DEFAULT: " + MapSettings.getDefaultMapWidth()+ " " + MapSettings.getDefaultMapHeight() + " " + MapSettings.getDefaultJungleWidth() + " " + MapSettings.getDefaultJungleHeight() + ")\n" +
+                                              "setAnimalEnergyLoss [arg]                                                         - sets amount of energy that animals lose after each day (DEFAULT: " + AnimalSettings.getDefaultDailyEnergyLoss() +", MIN: 0, MAX: 100)\n" +
+                                              "setAnimalEnergyGain [arg]                                                         - sets amount of energy that animals gain after eating one plant(DEFAULT: " + AnimalSettings.getDefaultEnergyGain() +", MIN: 0, MAX: 100)\n" +
+                                              "setAnimalEnergyToReproduce [arg]                                                  - sets minimal amount of energy needed to reproduce (DEFAULT: " + AnimalSettings.getDefaultEnergyToReproduce() +", MIN: 0, MAX: 100)\n" +
+                                              "setAnimalAgeToReproduce [arg]                                                     - sets minimal age needed to reproduce (DEFAULT: " + AnimalSettings.getDefaultAgeToReproduce() + ", MIN: 0)\n" +
+                                              "resetSettings                                                                     - resets all the settings to default values\n" +
+                                              "resetAnimalSettings                                                               - resets animals setting to default values\n" +
+                                              "resetMapSettings                                                                  - resets map settings to default values\n" +
+                                              "help                                                                              - displays help\n" +
+                                              "exit                                                                              - close program");
+                return;
+            }
             case ERROR:{
                 System.out.println("Wrong command");
             }
+            case EXIT: return;
         }
     }
 }

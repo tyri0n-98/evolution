@@ -1,10 +1,10 @@
 package agh.cs.evolution;
 
 public class MapSettings {
-    private static final int DEFAULT_MAP_WIDTH = 50;
-    private static final int DEFAULT_MAP_HEIGHT = 30;
-    private static final int DEFAULT_JUNGLE_WIDTH = 10;
-    private static final int DEFAULT_JUNGLE_HEIGHT = 10;
+    private static final int DEFAULT_MAP_WIDTH = 60;
+    private static final int DEFAULT_MAP_HEIGHT = 40;
+    private static final int DEFAULT_JUNGLE_WIDTH = 20;
+    private static final int DEFAULT_JUNGLE_HEIGHT = 15;
 
     private int mapWidth;
     private int mapHeight;
@@ -29,6 +29,15 @@ public class MapSettings {
         this.jungleHeight = jungleHeight;
     }
 
+    public String toString(){
+        String result = "Map settings:\n";
+        result += "Width: " + this.mapWidth + '\n';
+        result += "Height: " + this.mapHeight + '\n';
+        result += "Jungle width: " + this.jungleWidth + '\n';
+        result += "Jungle height: " + this.jungleHeight +'\n';
+        return result;
+    }
+
     public int getMapWidth() {
         return mapWidth;
     }
@@ -45,4 +54,19 @@ public class MapSettings {
         return jungleHeight;
     }
 
+    public static int getDefaultMapWidth() {
+        return DEFAULT_MAP_WIDTH;
+    }
+
+    public static int getDefaultMapHeight() {
+        return DEFAULT_MAP_HEIGHT;
+    }
+
+    public static int getDefaultJungleWidth() {
+        return DEFAULT_JUNGLE_WIDTH;
+    }
+
+    public static int getDefaultJungleHeight() {
+        return DEFAULT_JUNGLE_HEIGHT;
+    }
 }
