@@ -39,6 +39,8 @@ public class Task {
             case "exit": return Command.EXIT;
             case "help": return Command.HELP;
             case "reset": return Command.RESET;
+            case "setMapSize": return Command.SETMAPSIZE;
+            case "resetSettings": return Command.RESETSETTINGS;
             default: return Command.ERROR;
         }
     }

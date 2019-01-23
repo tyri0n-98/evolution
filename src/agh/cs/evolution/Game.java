@@ -4,24 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
-    private static final int DEFAULT_MAP_WIDTH = 50;
-    private static final int DEFAULT_MAP_HEIGHT = 30;
-    private static final int DEFAULT_JUNGLE_WIDTH = 10;
-    private static final int DEFAULT_JUNGLE_HEIGHT = 10;
     private WorldMap map;
     private List<Animal> animalsList;
 
-    public Game(){
-        this.map = new WorldMap(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT, DEFAULT_JUNGLE_WIDTH, DEFAULT_JUNGLE_HEIGHT);
-        Animal animal = new Animal(new Position(DEFAULT_MAP_WIDTH/2, DEFAULT_MAP_HEIGHT/2), Direction.NORTH, map);
-        this.map.place(animal);
-        this.animalsList = new LinkedList<>();
-        this.animalsList.add(animal);
-    }
 
-    public Game(int mapWidth, int mapHeight, int jungleWidth, int jungleHeight){
-        this.map = new WorldMap(mapWidth, mapHeight, jungleWidth, jungleHeight);
-        Animal animal = new Animal(new Position(mapWidth/2, mapHeight/2), Direction.NORTH, map);
+    public Game(MapSettings mapSettings, AnimalSettings animalSettings){
+        this.map = new WorldMap(mapSettings.getMapWidth(), mapSettings.getMapHeight(), mapSettings.getJungleWidth(), mapSettings.getJungleHeight());
+        Animal animal = new Animal(new Position(mapSettings.getMapWidth()/2, mapSettings.getMapHeight()/2), Direction.NORTH, map, animalSettings);
         this.map.place(animal);
         this.animalsList = new LinkedList<>();
         this.animalsList.add(animal);

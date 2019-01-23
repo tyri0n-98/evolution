@@ -2,10 +2,15 @@ package agh.cs.evolution;
 
 public class Solver {
     private Game game;
+    private AnimalSettings animalSettings;
+    private MapSettings mapSettings;
 
     public Solver(){
-        this.game = new Game();
+        this.animalSettings = new AnimalSettings();
+        this.mapSettings = new MapSettings();
+        this.game = new Game(this.mapSettings, this.animalSettings);
     }
+
     public void solve(Task task){
         switch (task.getCommand()){
             case START:{
@@ -21,11 +26,26 @@ public class Solver {
                 }
                 for(int i = 0; i < numberOfDays/printDays; i++) game.runDays(printDays);
                 game.runDays(numberOfDays%printDays);
-                break;
+                return;
             }
             case RESET:{
-                this.game = new Game();
-                break;
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case SETMAPSIZE:{
+                if(task.getArgs().size() < 4 || task.getArgs().get(2) > task.getArgs().get(0) || task.getArgs().get(3) > task.getArgs().get(1)) {
+                    System.out.println("Wrong arguments");
+                    return;
+                }
+                this.mapSettings.setMapSize(task.getArgs().get(0), task.getArgs().get(1), task.getArgs().get(2), task.getArgs().get(3));
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case RESETSETTINGS:{
+                this.mapSettings.setDefaults();
+                this.animalSettings.setDefaults();
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
             }
         }
     }

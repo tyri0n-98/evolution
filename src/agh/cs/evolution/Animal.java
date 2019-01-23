@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 public class Animal implements IMapElement{
-    private static final int DAILY_ENERGY_LOSS = 5;
-    private static final int ENERGY_TO_REPRODUCE = 95;
-    private static final int ENERGY_GAIN = 90;
-    private static final int AGE_TO_REPRODUCE = 2;
+    private AnimalSettings settings;
+
     private Position position;
     private int[] genes = new int[8];
     private int energy;
@@ -17,7 +15,8 @@ public class Animal implements IMapElement{
     private WorldMap map;
     private int age;
 
-    public Animal(Position pos, Direction orientation, WorldMap map){
+    public Animal(Position pos, Direction orientation, WorldMap map, AnimalSettings settings){
+        this.settings = settings;
         this.position = pos;
         this.age = 0;
         this.energy = this.maxEnergy;
@@ -28,7 +27,8 @@ public class Animal implements IMapElement{
         }
     }
 
-    public Animal(Position pos, Direction orientation, int[] genes, WorldMap map){
+    public Animal(Position pos, Direction orientation, int[] genes, WorldMap map, AnimalSettings settings){
+        this.settings = settings;
         this.position = pos;
         this.orientation = orientation;
         this.age = 0;
@@ -38,14 +38,7 @@ public class Animal implements IMapElement{
     }
 
     public boolean canReproduce(){
-        return this.energy >= ENERGY_TO_REPRODUCE && this.age >= AGE_TO_REPRODUCE;
-    }
-
-    public Direction searchForPlants(){
-        if(this.map.objectAt(this.position.add(this.orientation.getVector())) instanceof Plant) return this.orientation;
-        if(this.map.objectAt(this.position.add(this.orientation.next().getVector())) instanceof Plant) return this.orientation.next();
-        if(this.map.objectAt(this.position.add(this.orientation.multipleNext(7).getVector())) instanceof Plant) return this.orientation.multipleNext(7);
-        return null;
+        return this.energy >= settings.getEnergyToReproduce() && this.age >= settings.getAgeToReproduce();
     }
 
     public int[] mutate(){
@@ -60,7 +53,6 @@ public class Animal implements IMapElement{
     }
 
     public void chooseDirection(){
-        //if(searchForPlants() != null) this.orientation = searchForPlants();
         List<Integer> genesList = new ArrayList<>();
         int sum = 0;
         for(int i = 0; i < this.genes.length; i++){
@@ -75,13 +67,13 @@ public class Animal implements IMapElement{
     }
 
     public void eat(){
-        if(this.energy + ENERGY_GAIN > this.maxEnergy) this.energy = this.maxEnergy;
-        else this.energy += ENERGY_GAIN;
+        if(this.energy + settings.getEnergyGain() > this.maxEnergy) this.energy = this.maxEnergy;
+        else this.energy += settings.getEnergyGain();
     }
 
     public void dayPassed(){
         this.age += 1;
-        this.energy -= DAILY_ENERGY_LOSS;
+        this.energy -= settings.getDailyEnergyLoss();
         if(this.isDead()) map.remove(this);
     }
 
@@ -108,7 +100,7 @@ public class Animal implements IMapElement{
             if(map.canSpawn(spawnPosition)){
                 int newOrientation = randomGenerator.nextInt(8);
                 this.energy /=2;
-                return new Animal(spawnPosition, this.orientation.multipleNext(newOrientation), this.mutate(), this.map);
+                return new Animal(spawnPosition, this.orientation.multipleNext(newOrientation), this.mutate(), this.map, this.settings);
             }else
                 spawnDirection = spawnDirection.next();
         }
