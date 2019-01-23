@@ -2,7 +2,6 @@ package agh.cs.evolution;
 
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Random;
 
 public class WorldMap {
@@ -65,6 +64,24 @@ public class WorldMap {
         return false;
     }
 
+    private boolean canSpawnPlantsOnSteppe(){
+        for(int x = lowerLeft.x; x <= upperRight.x; x++){
+            if(x < jungleLowerLeft.x || x > jungleUpperRight.x){
+                for(int y = lowerLeft.y; y <= upperRight.y; y++){
+                    if(!isOccupied(new Position(x, y))) return true;
+                }
+            }else{
+                for(int y = lowerLeft.y; y < jungleLowerLeft.y; y++){
+                    if(!isOccupied(new Position(x, y))) return true;
+                }
+                for(int y = jungleUpperRight.y + 1; y <= upperRight.y; y++){
+                    if(!isOccupied(new Position(x, y))) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void spawnPlants(){
         Random randomGenerator = new Random();
         boolean planted = false;
@@ -76,16 +93,19 @@ public class WorldMap {
             }
         }
         planted = false;
-        while(!planted){
-            int plantX = randomGenerator.nextInt(upperRight.x + 1);
-            int plantY;
-            if(plantX < jungleLowerLeft.x || plantX > jungleUpperRight.x) plantY = randomGenerator.nextInt(upperRight.y + 1);
-            else{
-                int section = randomGenerator.nextInt(2);
-                if(section == 0) plantY = randomGenerator.nextInt(jungleLowerLeft.y);
-                else plantY = randomGenerator.nextInt(upperRight.y - jungleUpperRight.y) + jungleUpperRight.y + 1;
+        if(canSpawnPlantsOnSteppe()) {
+            while (!planted) {
+                int plantX = randomGenerator.nextInt(upperRight.x + 1);
+                int plantY;
+                if (plantX < jungleLowerLeft.x || plantX > jungleUpperRight.x)
+                    plantY = randomGenerator.nextInt(upperRight.y + 1);
+                else {
+                    int section = randomGenerator.nextInt(2);
+                    if (section == 0 && jungleLowerLeft.y != 0) plantY = randomGenerator.nextInt(jungleLowerLeft.y);
+                    else plantY = randomGenerator.nextInt(upperRight.y - jungleUpperRight.y) + jungleUpperRight.y + 1;
+                }
+                planted = place(new Plant(new Position(plantX, plantY)));
             }
-            planted = place(new Plant(new Position(plantX, plantY)));
         }
     }
 

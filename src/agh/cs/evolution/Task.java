@@ -22,25 +22,35 @@ public class Task {
 
         int j;
         Integer arg = 0;
+        boolean correctChar = false;
         for(j = i; j < this.input.length(); j++){
-            if(this.input.charAt(j) >= 48 && this.input.charAt(j) <= 57) arg = arg*10 + Character.getNumericValue(this.input.charAt(j));
-            else if(this.input.charAt(j) == ' ' && arg != 0){
+            if(this.input.charAt(j) >= 48 && this.input.charAt(j) <= 57) {
+                arg = arg * 10 + Character.getNumericValue(this.input.charAt(j));
+                correctChar = true;
+            }else if(this.input.charAt(j) != ' '){
+                correctChar = false;
+            } else if(correctChar){
                 args.add(arg);
                 arg = 0;
             }
-            else arg = 0;
         }
     }
 
     private Command toEnum(String input){
         switch (input){
-            case "start": return Command.START;
-            case "": return Command.START;
+            case "run": return Command.RUN;
+            case "": return Command.RUN;
             case "exit": return Command.EXIT;
             case "help": return Command.HELP;
             case "reset": return Command.RESET;
             case "setMapSize": return Command.SETMAPSIZE;
             case "resetSettings": return Command.RESETSETTINGS;
+            case "setAnimalEnergyLoss": return Command.SET_ANIMAL_ENERGY_LOSS;
+            case "setAnimalEnergyGain": return Command.SET_ANIMAL_ENERGY_GAIN;
+            case "setAnimalEnergyToReproduce": return Command.SET_ANIMAL_AGE_TO_REPRODUCE;
+            case "setAnimalAgeToReproduce": return Command.SET_ANIMAL_AGE_TO_REPRODUCE;
+            case "resetAnimalSettings": return Command.RESET_ANIMAL_SETTINGS;
+            case "resetMapSettings": return Command.RESET_MAP_SETTINGS;
             default: return Command.ERROR;
         }
     }

@@ -22,6 +22,22 @@ public class AnimalSettings {
         this.ageToReproduce = DEFAULT_AGE_TO_REPRODUCE;
     }
 
+    public void setDailyEnergyLoss(int dailyEnergyLoss) {
+        this.dailyEnergyLoss = dailyEnergyLoss;
+    }
+
+    public void setEnergyToReproduce(int energyToReproduce) {
+        this.energyToReproduce = energyToReproduce;
+    }
+
+    public void setEnergyGain(int energyGain) {
+        this.energyGain = energyGain;
+    }
+
+    public void setAgeToReproduce(int ageToReproduce) {
+        this.ageToReproduce = ageToReproduce;
+    }
+
     public int getDailyEnergyLoss() {
         return dailyEnergyLoss;
     }

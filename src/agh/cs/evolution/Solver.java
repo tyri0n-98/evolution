@@ -13,10 +13,9 @@ public class Solver {
 
     public void solve(Task task){
         switch (task.getCommand()){
-            case START:{
+            case RUN:{
                 int numberOfDays = 1;
                 int printDays = 1;
-                System.out.println(task.getArgs());
                 if(task.getArgs().size() == 1){
                     numberOfDays = task.getArgs().get(0);
                     printDays = numberOfDays;
@@ -46,6 +45,55 @@ public class Solver {
                 this.animalSettings.setDefaults();
                 this.game = new Game(this.mapSettings, this.animalSettings);
                 return;
+            }
+            case RESET_ANIMAL_SETTINGS:{
+                this.animalSettings.setDefaults();
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case RESET_MAP_SETTINGS:{
+                this.mapSettings.setDefaults();
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case SET_ANIMAL_ENERGY_LOSS:{
+                if(task.getArgs().size() < 1){
+                    System.out.println("Wrong arguments");
+                    return;
+                }
+                this.animalSettings.setDailyEnergyLoss(task.getArgs().get(0));
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case SET_ANIMAL_ENERGY_GAIN:{
+                if(task.getArgs().size() < 1){
+                    System.out.println("Wrong arguments");
+                    return;
+                }
+                this.animalSettings.setEnergyGain(task.getArgs().get(0));
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case SET_ANIMAL_ENERGY_TO_REPRODUCE:{
+                if(task.getArgs().size() < 1){
+                    System.out.println("Wrong arguments");
+                    return;
+                }
+                this.animalSettings.setEnergyToReproduce(task.getArgs().get(0));
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case SET_ANIMAL_AGE_TO_REPRODUCE:{
+                if(task.getArgs().size() < 1){
+                    System.out.println("Wrong arguments");
+                    return;
+                }
+                this.animalSettings.setAgeToReproduce(task.getArgs().get(0));
+                this.game = new Game(this.mapSettings, this.animalSettings);
+                return;
+            }
+            case ERROR:{
+                System.out.println("Wrong command");
             }
         }
     }
